@@ -1,9 +1,10 @@
 /// <reference types="@types/webpack-env" />
-import { combineReducers } from "redux";
-import root from "../Sagas";
-import configureStore from "./CreateStore";
-import { GithubReducer, ImmutableGithubState } from "./GithubReducers";
-import { NavigationReducer, NavigationState } from "./NavigationReducers";
+import { combineReducers } from 'redux';
+import root from '../Sagas';
+import configureStore from './CreateStore';
+import { GithubReducer, ImmutableGithubState } from './GithubReducers';
+import { NavigationReducer, NavigationState } from './NavigationReducers';
+import UserReducer, { UserState } from './UserReducers';
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
@@ -11,7 +12,7 @@ export const reducers = combineReducers({
   github: GithubReducer,
 });
 
-export interface State {
+export interface RootState {
   github: ImmutableGithubState;
   nav: NavigationState;
 }
@@ -22,10 +23,10 @@ export default () => {
 
   if (module.hot) {
     module.hot.accept(() => {
-      const nextRootReducer = require("./").reducers;
+      const nextRootReducer = require('./').reducers;
       store.replaceReducer(nextRootReducer);
 
-      const newYieldedSagas = require("../Sagas").default;
+      const newYieldedSagas = require('../Sagas').default;
       sagasManager.cancel();
       sagasManager.done.then(() => {
         sagasManager = sagaMiddleware.run(newYieldedSagas);
