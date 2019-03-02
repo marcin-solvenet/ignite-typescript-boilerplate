@@ -12,21 +12,22 @@
 import { ApiResponse } from "apisauce";
 import { SagaIterator } from "redux-saga";
 import { call, put } from "redux-saga/effects";
-import { <%= props.name %>Actions, <%= props.name %>Action } from "../../Reducers/<%= props.name %>Reducers";
-import { <%= props.name %>Api, <%= props.name %>Response } from "../../Services/<%= props.name %>Api";
+import { <%= props.name %>Actions } from "../../Reducers/<%= props.name %>Reducers";
 
-
-export function * get<%= props.name %> (api: <%= props.name %>Api, action: <%= props.name %>Action): SagaIterator {
-  const { data } = action;
+export function * get<%= props.name %> (
+  api: any, 
+  action: ReturnType<typeof <%= props.name %>Actions.request> 
+): SagaIterator {
+  const { payload } = action;
   // make the call to the api
-  const response: ApiResponse<<%= props.name %>Response>  = yield call(api.get<%= camelCase(props.name) %>, data);
+  const response: ApiResponse<any>  = yield call(api.get<%= camelCase(props.name) %>, payload);
 
   // success?
   if (response.ok) {
     // You might need to change the response here - do this with a 'transform',
     // located in ../../Transforms/. Otherwise, just pass the data back from the api.
-    yield put(<%= props.name %>Actions.success({data: response.data}));
+    yield put(<%= props.name %>Actions.success(response.data));
   } else {
-    yield put(<%= props.name %>Actions.failure());
+    yield put(<%= props.name %>Actions.failure(response.data));
   }
 }

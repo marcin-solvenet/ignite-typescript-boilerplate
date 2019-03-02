@@ -47,15 +47,10 @@ class <%= props.name %> extends
 
   };
 
-  public static navigationOptions: NavigationDrawerScreenOptions = {
-    drawerLabel: "Welcome",
-    drawerIcon: ({ tintColor, focused }: {tintColor: string, focused: boolean}) => (
-      <Icon
-        name="home"
-        size={20}
-        style={{ color: tintColor }}
-      />
-    ),
+  public static navigationOptions: NavigationStackScreenOptions  ({ navigation, screenProps }) => {
+    return {
+         title: '<%= pascalCase(props.name) %>',
+	}
   };
 
   public render() {
